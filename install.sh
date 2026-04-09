@@ -43,9 +43,9 @@ fi
 
 echo ""
 echo "3. Setting up Nginx Configuration (Requires sudo)..."
-if [ -f "./nginx/nginx.config" ]; then
-    sudo cp "./nginx/nginx.config" "/etc/nginx/"
-    echo "  -> Copied nginx.config to /etc/nginx/"
+if [ -f "./nginx/nginx.conf" ]; then
+    sudo cp "./nginx/nginx.conf" "/etc/nginx/nginx.conf"
+    echo "  -> Copied nginx.conf to /etc/nginx/nginx.conf"
     echo "  -> Testing Nginx configuration..."
     sudo nginx -t
     if [ $? -eq 0 ]; then

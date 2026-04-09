@@ -5,7 +5,7 @@ This repository tracks the system-level configurations and scripts required to s
 ## Project Structure
 
 - `autostart/` - Contains `.desktop` files that launch applications automatically on boot.
-- `nginx/` - Contains the Nginx web server configuration (`nginx.config`).
+- `nginx/` - Contains the Nginx web server configuration (`nginx.conf`).
 - `scripts/` - Custom shell scripts used by the system (e.g., `start_vnc_scraper.sh`).
 - `install.sh` - Automated deployment script.
 
@@ -33,7 +33,7 @@ This repository tracks the system-level configurations and scripts required to s
 The installation script automates the deployment by:
 1. Copying the `.desktop` files from `autostart/` into `~/.config/autostart/`
 2. Copying `start_vnc_scraper.sh` into `~/scripts/` and making it executable.
-3. Using `sudo` to copy the `nginx.config` file into `/etc/nginx/`, testing the config, and restarting the `nginx` service.
+3. Using `sudo` to copy the `nginx.conf` file into `/etc/nginx/`, testing the config, and restarting the `nginx` service.
 
 ## Making Changes
 If you update any files on your Raspberry Pi locally (e.g. in `~/.config/autostart/` or `/etc/nginx/`), be sure to copy those changes back to this repository and push them so that others can benefit from the updates!
