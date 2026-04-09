@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Camera RTMP Stream
+Comment=Streams the USB camera to the local Nginx RTMP server
+Exec=sh -c "$HOME/scripts/start_camera_stream.sh"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

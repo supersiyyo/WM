@@ -1,1 +1,8 @@
-# TODO: Paste the contents of ~/.config/autostart/vnc_scraper.desktop here
+[Desktop Entry]
+Type=Application
+Name=VNC Scraper
+Comment=Starts the VNC Scraper loop
+Exec=sh -c "$HOME/scripts/start_vnc_scraper.sh"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

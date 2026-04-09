@@ -35,6 +35,12 @@ if [ -f "./scripts/start_vnc_scraper.sh" ]; then
     echo "  -> Copied start_vnc_scraper.sh to $SCRIPTS_DIR/ and made it executable"
 fi
 
+if [ -f "./scripts/start_camera_stream.sh" ]; then
+    cp "./scripts/start_camera_stream.sh" "$SCRIPTS_DIR/"
+    chmod +x "$SCRIPTS_DIR/start_camera_stream.sh"
+    echo "  -> Copied start_camera_stream.sh to $SCRIPTS_DIR/ and made it executable"
+fi
+
 echo ""
 echo "3. Setting up Nginx Configuration (Requires sudo)..."
 if [ -f "./nginx/nginx.config" ]; then
