@@ -6,7 +6,7 @@ sleep 15
 # Using an infinite loop so it reconnects if the camera or server drops
 while true
 do
-    ffmpeg -f v4l2 -framerate 60 -video_size 1920x1080 -i /dev/video0 -c:v libx264 -preset ultrafast -tune zerolatency -b:v 4500k -g 120 -f flv rtmp://localhost/live/camera
+    ffmpeg -f v4l2 -input_format mjpeg -video_size 1920x1080 -framerate 60 -i /dev/video0 -c:v libx264 -preset ultrafast -tune zerolatency -pix_fmt yuv420p -threads 4 -b:v 4500k -maxrate 5000k -bufsize 9000k -g 120 -f flv rtmp://localhost/live/camera
     echo "Camera stream disconnected. Retrying in 5 seconds..."
     sleep 5
 done

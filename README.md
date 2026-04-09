@@ -35,5 +35,28 @@ The installation script automates the deployment by:
 2. Copying `start_vnc_scraper.sh` into `~/scripts/` and making it executable.
 3. Using `sudo` to copy the `nginx.conf` file into `/etc/nginx/`, testing the config, and restarting the `nginx` service.
 
+## Camera Streaming Pipeline
+
+This repository configures a lightweight, scalable camera streaming node utilizing a local Nginx RTMP server and FFmpeg.
+
+### Hardware Stack
+- **Camera**: Analog 1080p BNC Camera
+- **Capture**: USB 3.0 MS2130-based Video Capture Card
+- **Processing**: Raspberry Pi 5
+
+### FFmpeg Optimizations
+Since the Raspberry Pi 5 lacks a hardware H.264 encoder, the `start_camera_stream.sh` script applies specific best-practice optimizations for software encoding (`libx264`):
+- `-input_format mjpeg`: Prevents the USB capture card from throttling framerates.
+- `-preset ultrafast` & `-threads 4`: Distributes the encoding workload evenly across the Cortex-A76 cores.
+- `-maxrate` & `-bufsize`: Strictly caps bandwidth to prevent CPU spiking.
+- `-pix_fmt yuv420p`: Standardizes the color palette so network devices (like VLC) decode the stream flawlessly.
+
+### How to View the Stream Locally
+1. Find the Raspberry Pi's local IP address (`hostname -I`).
+2. Open VLC Media Player on any computer on the same network.
+3. Navigate to **Media** > **Open Network Stream...**
+4. Paste the URL: `rtmp://<PI_IP_ADDRESS>:1935/live/camera`
+5. Click **Play**!
+
 ## Making Changes
 If you update any files on your Raspberry Pi locally (e.g. in `~/.config/autostart/` or `/etc/nginx/`), be sure to copy those changes back to this repository and push them so that others can benefit from the updates!
