@@ -7,7 +7,7 @@ echo "  Deploying WM Environment Configuration     "
 echo "============================================="
 
 # Ensure running from the repository root
-if [ ! -d "./autostart" ] || [ ! -d "./nginx" ] || [ ! -d "./scripts" ]; then
+if [ ! -d "./autostart" ] || [ ! -d "./scripts" ]; then
     echo "Error: Please run this script from the root of the WM repository."
     exit 1
 fi
@@ -42,18 +42,40 @@ if [ -f "./scripts/start_camera_stream.sh" ]; then
 fi
 
 echo ""
-echo "3. Setting up Nginx Configuration (Requires sudo)..."
-if [ -f "./nginx/nginx.conf" ]; then
-    sudo cp "./nginx/nginx.conf" "/etc/nginx/nginx.conf"
-    echo "  -> Copied nginx.conf to /etc/nginx/nginx.conf"
-    echo "  -> Testing Nginx configuration..."
-    sudo nginx -t
-    if [ $? -eq 0 ]; then
-        echo "  -> Restarting Nginx service..."
-        sudo systemctl restart nginx
-    else
-        echo "  -> Nginx configuration test failed. Please check your syntax."
-    fi
+echo "3. Setting up MediaMTX Configuration (Requires sudo)..."
+echo "  -> Downloading MediaMTX v1.9.3..."
+wget -q -O /tmp/mediamtx.tar.gz https://github.com/bluenviron/mediamtx/releases/download/v1.9.3/mediamtx_v1.9.3_linux_arm64v8.tar.gz
+if [ $? -eq 0 ]; then
+    sudo mkdir -p /opt/mediamtx
+    sudo tar -xzf /tmp/mediamtx.tar.gz -C /opt/mediamtx
+    rm /tmp/mediamtx.tar.gz
+    
+    echo "  -> Creating systemd service for MediaMTX..."
+    cat << 'EOF' | sudo tee /etc/systemd/system/mediamtx.service > /dev/null
+[Unit]
+Description=MediaMTX Server
+After=network.target
+
+[Service]
+ExecStart=/opt/mediamtx/mediamtx /opt/mediamtx/mediamtx.yml
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    
+    sudo systemctl daemon-reload
+    sudo systemctl enable mediamtx
+    sudo systemctl restart mediamtx
+    
+    # Optional: If Nginx was previously installed, try removing/disabling it
+    sudo systemctl stop nginx 2>/dev/null
+    sudo systemctl disable nginx 2>/dev/null
+    
+    echo "  -> MediaMTX installed and started!"
+else
+    echo "  -> Failed to download MediaMTX. Please check your internet connection."
 fi
 
 echo "============================================="

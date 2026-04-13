@@ -5,7 +5,6 @@ This repository tracks the system-level configurations and scripts required to s
 ## Project Structure
 
 - `autostart/` - Contains `.desktop` files that launch applications automatically on boot.
-- `nginx/` - Contains the Nginx web server configuration (`nginx.conf`).
 - `scripts/` - Custom shell scripts used by the system (e.g., `start_vnc_scraper.sh`).
 - `install.sh` - Automated deployment script.
 
@@ -13,8 +12,7 @@ This repository tracks the system-level configurations and scripts required to s
 
 ### Pre-requisites
 1. A Raspberry Pi 5 running a compatible OS (e.g., Raspberry Pi OS).
-2. `nginx` installed (`sudo apt install nginx`).
-3. Any other dependencies required by the autostart applications (like OBS).
+2. Any other dependencies required by the autostart applications (like OBS).
 
 ### Installation
 
@@ -33,11 +31,11 @@ This repository tracks the system-level configurations and scripts required to s
 The installation script automates the deployment by:
 1. Copying the `.desktop` files from `autostart/` into `~/.config/autostart/`
 2. Copying `start_vnc_scraper.sh` into `~/scripts/` and making it executable.
-3. Using `sudo` to copy the `nginx.conf` file into `/etc/nginx/`, testing the config, and restarting the `nginx` service.
+3. Downloading MediaMTX (ARM64), setting it up in `/opt/mediamtx/`, and creating a systemd service to run it automatically.
 
 ## Camera Streaming Pipeline
 
-This repository configures a lightweight, scalable camera streaming node utilizing a local Nginx RTMP server and FFmpeg.
+This repository configures a lightweight, scalable camera streaming node utilizing a local MediaMTX WebRTC server and FFmpeg.
 
 ### Hardware Stack
 - **Camera**: Analog 1080p BNC Camera
@@ -53,10 +51,9 @@ Since the Raspberry Pi 5 lacks a hardware H.264 encoder, the `start_camera_strea
 
 ### How to View the Stream Locally
 1. Find the Raspberry Pi's local IP address (`hostname -I`).
-2. Open VLC Media Player on any computer on the same network.
-3. Navigate to **Media** > **Open Network Stream...**
-4. Paste the URL: `rtmp://<PI_IP_ADDRESS>:1935/live/camera`
-5. Click **Play**!
+2. Open any standard web browser (Chrome, Safari, Firefox) on any computer/device on the same network.
+3. Navigate to the WebRTC URL: `http://<PI_IP_ADDRESS>:8889/camera/`
+4. The stream will instantly play with sub-second latency!
 
 ## Making Changes
-If you update any files on your Raspberry Pi locally (e.g. in `~/.config/autostart/` or `/etc/nginx/`), be sure to copy those changes back to this repository and push them so that others can benefit from the updates!
+If you update any files on your Raspberry Pi locally (e.g. in `~/.config/autostart/` or `/opt/mediamtx/mediamtx.yml`), be sure to copy those changes back to this repository and push them so that others can benefit from the updates!
